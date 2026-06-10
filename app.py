@@ -43,7 +43,8 @@ def load_frames() -> dict:
             "comparison": analysis.responder_comparison_data(conn),
             "baseline": analysis.baseline_samples(conn),
             "meta": pd.read_sql_query(
-                """SELECT sa.sample_id AS sample, s.project_id AS project,
+                """SELECT sa.sample_id AS sample, s.subject_id AS subject,
+                          s.project_id AS project,
                           s.condition, s.treatment, s.response, s.sex,
                           sa.sample_type, sa.time_from_treatment_start AS time
                    FROM samples sa JOIN subjects s ON s.subject_id = sa.subject_id""",
@@ -196,6 +197,8 @@ with tab_part4:
     st.metric("Matching samples", len(subset))
 
     if len(subset):
+        # Dedup to subject level so response/sex breakdowns count subjects, not samples.
+        subj = subset.drop_duplicates("subject")
         col_a, col_b, col_c = st.columns(3)
         with col_a:
             st.markdown("**Samples per project**")
@@ -208,7 +211,7 @@ with tab_part4:
         with col_b:
             st.markdown("**Subjects by response**")
             by_resp = (
-                subset.drop_duplicates("sample").groupby("response", dropna=False)
+                subj.groupby("response", dropna=False)
                 .size().reset_index(name="n_subjects")
             )
             st.plotly_chart(
@@ -218,7 +221,7 @@ with tab_part4:
             )
         with col_c:
             st.markdown("**Subjects by sex**")
-            by_sex = subset.groupby("sex").size().reset_index(name="n_subjects")
+            by_sex = subj.groupby("sex").size().reset_index(name="n_subjects")
             st.plotly_chart(
                 px.bar(by_sex, x="sex", y="n_subjects", color="sex")
                 .update_layout(showlegend=False),

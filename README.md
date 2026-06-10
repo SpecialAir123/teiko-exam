@@ -149,7 +149,7 @@ The Streamlit dashboard (`app.py`) has three tabs:
    condition / treatment / sample type / timepoint so Bob can explore other
    subsets, not just the baseline default.
 
-**Live dashboard link:** _<add your Streamlit Community Cloud URL here after deploying>_
+**Live dashboard link:** <https://teiko-exam-tom5ubedw5uk77w5y3zefa.streamlit.app/>
 
 ### Deploying the public link (free)
 1. Push this repo to GitHub.

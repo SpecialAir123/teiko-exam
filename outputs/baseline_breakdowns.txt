@@ -1,0 +1,13 @@
+Baseline samples (melanoma, miraclib, PBMC, t=0): 656
+
+Samples per project:
+  prj1: 384
+  prj3: 272
+
+Subjects by response:
+  no: 325
+  yes: 331
+
+Subjects by sex:
+  F: 312
+  M: 344
